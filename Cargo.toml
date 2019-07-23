@@ -1,0 +1,9 @@
+[package]
+name = "omoideni"
+version = "0.1.0"
+authors = ["horyu <28817604+horyu@users.noreply.github.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
