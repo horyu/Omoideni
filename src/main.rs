@@ -23,7 +23,6 @@ fn main() {
     }
     println!("valid_inputs : {:?}", valid_inputs);
     for valid_input in &valid_inputs {
-        println!("make_empty : {:?}", valid_input);
         make_empty(valid_input);
     }
 }
@@ -40,11 +39,13 @@ fn make_empty(target: &str) {
 }
 
 fn make_file_enpty(file: &str) {
-    println!("[file]\t{:?}", file);
+    // println!("[file]\t{}", file);
+    println!("{}", file);
+    fs::OpenOptions::new().write(true).truncate(true).open(file).unwrap();
 }
 
 fn make_dir_enpty(dir: &str) {
-    println!("[dir]\t{:?}", dir);
+    // println!("[dir]\t{}", dir);
     for entry in fs::read_dir(dir).unwrap() {
         let entry_path = entry.unwrap().path();
         let entry_path_as_osstr = entry_path.into_os_string();
