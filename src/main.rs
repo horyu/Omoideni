@@ -2,11 +2,11 @@ use std::path::Path;
 use std::fs;
 
 fn main() {
-    let mut inputs: Vec<String> = std::env::args().collect();
-    inputs.remove(0); // 最初の要素（=実行ファイル）を削除
+    let inputs: Vec<String> = std::env::args().collect();
     let mut invalid_inputs: Vec<String> = Vec::new(); 
     let mut valid_inputs: Vec<String> = Vec::new(); 
-    for input in &inputs {
+    // 最初の要素（=実行ファイル）は無視
+    for input in &inputs[1..] {
         if Path::new(input).exists() {
             valid_inputs.push(input.to_string());
         } else {
