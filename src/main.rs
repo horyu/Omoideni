@@ -3,6 +3,10 @@ use std::path::Path;
 
 fn main() {
     let inputs: Vec<String> = std::env::args().collect();
+    if inputs.len() < 2 {
+        eprintln!("input file or directory.");
+        std::process::exit(-1);
+    }
     let mut invalid_inputs: Vec<String> = Vec::new();
     let mut valid_inputs: Vec<String> = Vec::new();
     // 最初の要素（=実行ファイル）は無視
