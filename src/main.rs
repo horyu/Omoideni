@@ -4,7 +4,7 @@ use std::path::Path;
 fn main() {
     let inputs: Vec<String> = std::env::args().collect();
     if inputs.len() < 2 {
-        eprintln!("input file or directory.");
+        eprintln!("input file and/or directory.");
         std::process::exit(-1);
     }
     let mut invalid_inputs: Vec<String> = Vec::new();
@@ -19,9 +19,8 @@ fn main() {
     }
     // 存在しないファイル・ディレクトリがあれば終了
     if !invalid_inputs.is_empty() {
-        eprintln!("[Error]");
         for invalid_input in invalid_inputs {
-            eprintln!("\"{}\" is not exist.", invalid_input);
+            eprintln!("[Error]\"{}\" is not exist.", invalid_input);
         }
         std::process::exit(-1);
     }
@@ -41,7 +40,7 @@ fn make_empty(target: &str) {
             make_dir_enpty(target);
         }
     } else {
-        eprintln!("\"{}\"'s metadata is unavailable.", target);
+        eprintln!("[Error]\"{}\"'s metadata is unavailable.", target);
     }
 }
 
@@ -50,7 +49,7 @@ fn make_file_enpty(file: &str) {
     let f = fs::OpenOptions::new().write(true).truncate(true).open(file);
     match f {
         Ok(_) => println!("{}", file),
-        Err(_) => eprintln!("\"{}\" is unavailable.", file),
+        Err(_) => eprintln!("[Error]\"{}\" is unavailable.", file),
     }
 }
 
@@ -64,6 +63,6 @@ fn make_dir_enpty(dir: &str) {
             make_empty(entry_path_as_str);
         }
     } else {
-        eprintln!("\"{}\" is unavailable", dir);
+        eprintln!("[Error]\"{}\" is unavailable.", dir);
     }
 }
