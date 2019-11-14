@@ -1,6 +1,6 @@
-use std::process;
 use std::fs;
 use std::path::Path;
+use std::process;
 
 fn main() {
     let inputs: Vec<String> = std::env::args().collect();
@@ -8,16 +8,11 @@ fn main() {
         eprintln!("input file and/or directory.");
         process::exit(1);
     }
-    let mut invalid_inputs: Vec<String> = Vec::new();
-    let mut valid_inputs: Vec<String> = Vec::new();
-    // 最初の要素（=実行ファイル）は無視
-    for input in &inputs[1..] {
-        if Path::new(input).exists() {
-            valid_inputs.push(input.to_string());
-        } else {
-            invalid_inputs.push(input.to_string());
-        }
-    }
+    // // 最初の要素（=実行ファイル）は無視して入力チェック
+    let invalid_inputs: Vec<&String> = inputs[1..]
+        .iter()
+        .filter(|input| !Path::new(input).exists())
+        .collect();
     // 存在しないファイル・ディレクトリがあれば終了
     if !invalid_inputs.is_empty() {
         for invalid_input in invalid_inputs {
@@ -25,9 +20,9 @@ fn main() {
         }
         process::exit(1);
     }
-    println!("valid_inputs : {:?}", valid_inputs);
-    for valid_input in &valid_inputs {
-        make_empty(valid_input);
+    println!("valid_inputs : {:?}", &inputs[1..]);
+    for valid_input in &inputs[1..] {
+        make_empty(&valid_input);
     }
 }
 
