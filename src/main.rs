@@ -1,3 +1,4 @@
+use std::process;
 use std::fs;
 use std::path::Path;
 
@@ -5,7 +6,7 @@ fn main() {
     let inputs: Vec<String> = std::env::args().collect();
     if inputs.len() < 2 {
         eprintln!("input file and/or directory.");
-        std::process::exit(-1);
+        process::exit(1);
     }
     let mut invalid_inputs: Vec<String> = Vec::new();
     let mut valid_inputs: Vec<String> = Vec::new();
@@ -22,7 +23,7 @@ fn main() {
         for invalid_input in invalid_inputs {
             eprintln!("[Error]\"{}\" is not exist.", invalid_input);
         }
-        std::process::exit(-1);
+        process::exit(1);
     }
     println!("valid_inputs : {:?}", valid_inputs);
     for valid_input in &valid_inputs {
