@@ -1,6 +1,5 @@
-use std::fs;
-use std::path::Path;
 use std::process;
+use std::fs;
 
 fn main() {
     let inputs: Vec<String> = std::env::args().collect();
@@ -11,7 +10,7 @@ fn main() {
     // // 最初の要素（=実行ファイル）は無視して入力チェック
     let invalid_inputs: Vec<&String> = inputs[1..]
         .iter()
-        .filter(|input| !Path::new(input).exists())
+        .filter(|input| !std::path::Path::new(input).exists())
         .collect();
     // 存在しないファイル・ディレクトリがあれば終了
     if !invalid_inputs.is_empty() {
@@ -41,7 +40,6 @@ fn make_empty(target: &str) {
 }
 
 fn make_file_enpty(file: &str) {
-    // println!("[file]\t{}", file);
     let f = fs::OpenOptions::new().write(true).truncate(true).open(file);
     match f {
         Ok(_) => println!("{}", file),
@@ -50,7 +48,6 @@ fn make_file_enpty(file: &str) {
 }
 
 fn make_dir_enpty(dir: &str) {
-    // println!("[dir]\t{}", dir);
     if let Ok(read_dir) = fs::read_dir(dir) {
         for entry in read_dir {
             let entry_path = entry.unwrap().path();
