@@ -51,9 +51,7 @@ fn make_dir_enpty(dir: &str) {
     if let Ok(read_dir) = fs::read_dir(dir) {
         for entry in read_dir {
             let entry_path = entry.unwrap().path();
-            let entry_path_as_osstr = entry_path.into_os_string();
-            let entry_path_as_str = entry_path_as_osstr.to_str().unwrap();
-            make_empty(entry_path_as_str);
+            make_empty(entry_path.to_str().unwrap());
         }
     } else {
         eprintln!("[Error]\"{}\" is unavailable.", dir);
