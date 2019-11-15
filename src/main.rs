@@ -1,28 +1,33 @@
-use std::process;
 use std::fs;
 
 fn main() {
-    let inputs: Vec<String> = std::env::args().collect();
-    if inputs.len() < 2 {
-        eprintln!("input file and/or directory.");
-        process::exit(1);
+    let args: Vec<String> = std::env::args().collect();
+    let inputs: &[String] = &args[1..];
+    if is_invalid_inputs(inputs) {
+        std::process::exit(1);
     }
-    // // 最初の要素（=実行ファイル）は無視して入力チェック
-    let invalid_inputs: Vec<&String> = inputs[1..]
+    println!("valid_inputs : {:?}", inputs);
+    for valid_input in inputs {
+        make_empty(valid_input);
+    }
+}
+
+fn is_invalid_inputs(inputs: &[String]) -> bool {
+    if inputs.len() < 1 {
+        eprintln!("input file and/or directory.");
+        return true;
+    }
+    let invalid_inputs: Vec<&String> = inputs
         .iter()
         .filter(|input| !std::path::Path::new(input).exists())
         .collect();
-    // 存在しないファイル・ディレクトリがあれば終了
     if !invalid_inputs.is_empty() {
         for invalid_input in invalid_inputs {
             eprintln!("[Error]\"{}\" is not exist.", invalid_input);
         }
-        process::exit(1);
+        return true;
     }
-    println!("valid_inputs : {:?}", &inputs[1..]);
-    for valid_input in &inputs[1..] {
-        make_empty(&valid_input);
-    }
+    false
 }
 
 fn make_empty(target: &str) {
