@@ -51,7 +51,7 @@ fn make_empty(target: &str) {
 fn make_file_enpty(file: &str) {
     let f = fs::OpenOptions::new().write(true).truncate(true).open(file);
     match f {
-        Ok(_) => println!("{}", file),
+        Ok(_) => println!("[Done]{}", file),
         Err(_) => eprintln!("[Error]\"{}\" is unavailable.", file),
     }
 }
