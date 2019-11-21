@@ -31,13 +31,17 @@ fn is_invalid_inputs(inputs: &[String]) -> bool {
 }
 
 fn make_empty(target: &str) {
-    if let Ok(metadata) = fs::metadata(target) {
+    if let Ok(metadata) = fs::symlink_metadata(target) {
         let file_type = metadata.file_type();
-        if file_type.is_file() {
-            make_file_enpty(target);
-        }
-        if file_type.is_dir() {
-            make_dir_enpty(target);
+        if file_type.is_symlink() {
+            eprintln!("[Skip]\"{}\"' is a symbolic link.", target);
+        } else {
+            if file_type.is_file() {
+                make_file_enpty(target);
+            }
+            if file_type.is_dir() {
+                make_dir_enpty(target);
+            }
         }
     } else {
         eprintln!("[Error]\"{}\"'s metadata is unavailable.", target);
