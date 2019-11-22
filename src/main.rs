@@ -23,7 +23,7 @@ fn is_invalid_inputs(inputs: &[String]) -> bool {
         .collect();
     if !invalid_inputs.is_empty() {
         for invalid_input in invalid_inputs {
-            eprintln!("[Error]\"{}\" is not exist.", invalid_input);
+            eprintln!("[Error: Non-existence]{}", invalid_input);
         }
         return true;
     }
@@ -31,20 +31,21 @@ fn is_invalid_inputs(inputs: &[String]) -> bool {
 }
 
 fn make_empty(target: &str) {
-    if let Ok(metadata) = fs::symlink_metadata(target) {
-        let file_type = metadata.file_type();
-        if file_type.is_symlink() {
-            eprintln!("[Skip]\"{}\"' is a symbolic link.", target);
-        } else {
-            if file_type.is_file() {
-                make_file_enpty(target);
-            }
-            if file_type.is_dir() {
-                make_dir_enpty(target);
+    match fs::symlink_metadata(target) {
+        Ok(metadata) => {
+            let file_type = metadata.file_type();
+            if file_type.is_symlink() {
+                eprintln!("[Skip: Symbolic link]{}", target);
+            } else {
+                if file_type.is_file() {
+                    make_file_enpty(target);
+                }
+                if file_type.is_dir() {
+                    make_dir_enpty(target);
+                }
             }
         }
-    } else {
-        eprintln!("[Error]\"{}\"'s metadata is unavailable.", target);
+        Err(e) => eprintln!("[Error: {}]{}", e, target),
     }
 }
 
@@ -52,17 +53,18 @@ fn make_file_enpty(file: &str) {
     let f = fs::OpenOptions::new().write(true).truncate(true).open(file);
     match f {
         Ok(_) => println!("[Done]{}", file),
-        Err(_) => eprintln!("[Error]\"{}\" is unavailable.", file),
+        Err(e) => eprintln!("[Error: {}]{}", e, file),
     }
 }
 
 fn make_dir_enpty(dir: &str) {
-    if let Ok(read_dir) = fs::read_dir(dir) {
-        for entry in read_dir {
-            let entry_path = entry.unwrap().path();
-            make_empty(entry_path.to_str().unwrap());
+    match fs::read_dir(dir) {
+        Ok(read_dir) => {
+            for entry in read_dir {
+                let entry_path = entry.unwrap().path();
+                make_empty(entry_path.to_str().unwrap());
+            }
         }
-    } else {
-        eprintln!("[Error]\"{}\" is unavailable.", dir);
+        Err(e) => eprintln!("[Error: {}]{}", e, dir),
     }
 }
