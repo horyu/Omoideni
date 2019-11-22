@@ -6,7 +6,6 @@ fn main() {
     if is_invalid_inputs(inputs) {
         std::process::exit(1);
     }
-    println!("valid_inputs : {:?}", inputs);
     for valid_input in inputs {
         make_empty(valid_input);
     }
@@ -17,17 +16,14 @@ fn is_invalid_inputs(inputs: &[String]) -> bool {
         eprintln!("input file and/or directory.");
         return true;
     }
-    let invalid_inputs: Vec<&String> = inputs
-        .iter()
-        .filter(|input| !std::path::Path::new(input).exists())
-        .collect();
-    if !invalid_inputs.is_empty() {
-        for invalid_input in invalid_inputs {
-            eprintln!("[Error: Non-existence]{}", invalid_input);
+    let mut is_invalid = false;
+    for input in inputs {
+        if !std::path::Path::new(input).exists() {
+            eprintln!("[non-existent path]{}", input);
+            is_invalid = true;
         }
-        return true;
     }
-    false
+    is_invalid
 }
 
 fn make_empty(target: &str) {
