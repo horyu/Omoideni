@@ -12,7 +12,7 @@ fn main() {
 }
 
 fn is_invalid_inputs(inputs: &[String]) -> bool {
-    if inputs.len() < 1 {
+    if inputs.is_empty() {
         eprintln!("input file and/or directory.");
         return true;
     }
